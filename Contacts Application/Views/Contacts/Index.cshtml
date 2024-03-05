@@ -1,6 +1,6 @@
-﻿@model IEnumerable<Contacts>
+﻿@model PaginatedList<Contacts>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Contacts-Index";
 }
 
 <div class="container p-0 text-light">
@@ -9,15 +9,22 @@
         <h1 class="primary">Contacts List</h1>
         </div>
     <div class="col-6 text-end">
-            <a asp-controller="Contacts" asp-action="Create" class="btn btn-primary" onmouseover="this.style.color='#2ecc71'" onmouseout="this.style.color='#f7f9f9'">
+            <a asp-controller="Contacts" asp-action="Create" class="btn btn-primary mb-5" onmouseover="this.style.color='#2ecc71'" onmouseout="this.style.color='#f7f9f9'">
                 <i class="bi bi-person-fill-add"></i> Create
             </a>
     </div>
     </div>
     <div class="container m-0 p-0">
-        <header class="header bg-primary" >
-            <form class="search-bar border-1" >
-                <input type="search-name" class="contact-search" name="search-area" placeholder="Search" style="background-color:dimgray; color:white" />
+        <header class="header bg-primary">
+            <form asp-action="Index"class="search-bar border-2" >
+                <div class="form-check  input-group" >
+                    <input name="childname" type="text" class="form-check form-control-sm ps-lg-0" name="search-area" aria-label="Search" placeholder="Search" style="background-color:dimgray; color:white; width:500px; height:50px;" />
+                    <div class="input-group-lg">
+                    <span class="input-group-text" aria-hidden="true" style="background-color:dimgray; height:50px;" id="basic-text">
+                        <i class="bi bi-search" aria-hidden="true"></i>
+                    </span>
+                    </div>
+                </div>
             </form>
         </header>
         @foreach (var obj in Model)
@@ -25,12 +32,25 @@
         <section class="contacts-library m-4">
                 <div class="contacts-section">
                         <a asp-controller="Contacts" asp-action="Detail" asp-route-id="@obj.Id"><p class="contact-name m-2" onmouseover="this.style.color='#387ADF'" onmouseout="this.style.color='#f7f9f9'">@obj.Name</p></a>
-                        <p><a asp-controller="Contacts" asp-action="Edit" asp-route-id="@obj.Id" ><i class="bi bi-pencil text-success m-1">Edit</i></a> <a asp-controller="Contacts" asp-action="Delete" asp-route-id="@obj.Id"><i class="bi bi-trash-fill text-danger">Delete</i></a></p>
+                    <p><a asp-controller="Contacts" asp-action="Edit" asp-route-id="@obj.Id"><i class="bi bi-pencil text-success m-1">Edit</i></a> <a asp-controller="Contacts" asp-action="DeleteView" asp-route-id="@obj.Id"><i class="bi bi-trash-fill text-danger">Delete</i></a></p>
                 </div>
         <hr style="border-top: 1px solid #387ADF;" />
         </section>
-
         }
 </div>  
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<a asp-action="Index" asp-route-pageNumber="@(Model.PageIndex-1)" class="btn btn-primary @prevDisabled">Previous</a>
+<a asp-controller="Contacts" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex+1)" class="btn btn-primary @nextDisabled">Next</a>
 
-
+@section scripts{
+    <script>
+        $(function() {
+            $("#basic-text").click(function() {
+                     $("form").submit();
+                })
+        });
+    </script>
+}

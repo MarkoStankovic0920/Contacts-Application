@@ -1,7 +1,8 @@
 ﻿@model Contacts
-
-<form method="post" asp-action="Delete" >
-    ">
+@{
+    ViewData["Title"] = "Contacts-Delete";
+}
+<form method="post" asp-action="Delete">
     <input asp-for="Id" hidden />
     <div class="border p-3 mt-4">
         <div class="row pb-2">
@@ -11,11 +12,11 @@
         <div asp-validation-summary="All" class="text-danger mt-0 mb-1 ms-3"></div>
         <div class="mb-2 text-info">
             <label asp-for="Name" class="mb-1"></label> <i class="bi bi-person-fill text-light"></i>
-            <input asp-for="Name" class="form-control mb-3" disabled />
-            <label asp-for="Email" class="mb-1"></label>    <i class="bi bi-envelope-at text-light"></i>
-            <input asp-for="Email" class="form-control mb-3" disabled />
+            <h2 class="text-light">@Model.Name</h2>
             <label asp-for="Phone" class="mb-1"></label>    <i class="bi bi-telephone text-light"></i>
-            <input asp-for="Phone" class="form-control mb-3" disabled />
+            <h2 class="text-light">@Model.Phone</h2>
+            <label asp-for="Email" class="mb-1"></label>    <i class="bi bi-envelope-at text-light"></i>
+            <h2 class="text-light">@Model.Email</h2>
         </div>
         <button type="submit" class="btn btn-primary m-1" style="width:150px;" onclick="return confirm('Are you sure you want to delete this?')">Remove</button>
         <a asp-controller="Contacts" asp-action="Index" class="btn btn-light" style="width:200px;">Back to Contacts</a>
