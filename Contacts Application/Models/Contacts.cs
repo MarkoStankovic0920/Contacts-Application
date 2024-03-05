@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Contacts_Application.Models
 {
@@ -13,6 +12,7 @@ namespace Contacts_Application.Models
         public string Email { get; set; }
         [MaxLength(50)]
         [DataType(DataType.PhoneNumber)]
+        [Required]
         public string Phone { get; set; }
         public DateTime CreatedDateTime { get; set; } = DateTime.Now;
 

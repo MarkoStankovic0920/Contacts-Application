@@ -1,5 +1,7 @@
 ﻿@model Contacts
-
+@{
+    ViewData["Title"] = "Contacts-Edit";
+}
 <form method="post" asp-action="Edit">
 
     <div class="border p-3 mt-4">
@@ -11,10 +13,10 @@
         <div class="mb-2 text-info">
             <label asp-for="Name" class="mb-1"></label> <i class="bi bi-person-fill text-light"></i>
             <input asp-for="Name" class="form-control mb-3" />
+            <label asp-for="Phone" class="mb-1"></label> <i class="bi bi-telephone text-light"></i>
+            <input asp-for="Phone" class="form-control mb-3" />
             <label asp-for="Email" class="mb-1"></label>    <i class="bi bi-envelope-at text-light"></i>
             <input asp-for="Email" class="form-control mb-3" />
-            <label asp-for="Phone" class="mb-1"></label> <i class="bi bi-telephone text-light"></i>
-                <input asp-for="Phone" class="form-control mb-3" />
         </div>
         <button type="submit" class="btn btn-primary m-1" style="width:150px;">Update</button>
         <a asp-controller="Contacts" asp-action="Index" class="btn btn-light" style="width:200px;">Back to Contacts</a>

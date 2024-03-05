@@ -1,6 +1,7 @@
 ﻿using Contacts_Application.Data;
 using Contacts_Application.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Contacts_Application.Controllers
 {
@@ -12,14 +13,24 @@ namespace Contacts_Application.Controllers
         {
             _db = db;
         }
-        public IActionResult Index()
+        public IActionResult Index(int ? pageNumber, string ? childname = null)
         {
-            IEnumerable<Contacts> objContactsList = _db.Contacts;
-            return View(objContactsList);
+            int pageSize = 5;
+            if (string.IsNullOrEmpty(childname))
+            {
+                return View(PaginatedList<Contacts>.Create(_db.Contacts.ToList(), pageNumber ?? 1, pageSize));
+            }
+            else
+            {
+                var obj = _db.Contacts.Where(e => e.Name.Contains(childname)).ToList();
+                if (obj == null)
+                {
+                    return View("Index");
+                }
+                return View("Index", PaginatedList<Contacts>.Create(obj, pageNumber ?? 1, pageSize));
+            }    
         }
 
-
-        // GET
         public IActionResult Create()
         {
             return View();
@@ -42,7 +53,6 @@ namespace Contacts_Application.Controllers
 
         //POST
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Create(Contacts obj) {
             if (ModelState.IsValid)
             {    
@@ -52,6 +62,7 @@ namespace Contacts_Application.Controllers
             }
             return View();
         }
+
 
         public IActionResult Edit(int?id)
         {
@@ -69,8 +80,8 @@ namespace Contacts_Application.Controllers
         }
 
 
-        //POST
-        [HttpPost]
+        //Patch
+        [HttpPost] 
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Contacts obj)
         {
@@ -83,31 +94,34 @@ namespace Contacts_Application.Controllers
             return View();
         }
 
-        public IActionResult Delete(int? id)
+        public IActionResult DeleteView(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
 
             }
-            var categoryFromDb = _db.Contacts.Find(id);
-            if (categoryFromDb == null)
+            var contactsFromDb = _db.Contacts.Find(id);
+            if (contactsFromDb == null)
             {
                 return NotFound();
             }
-            return View(categoryFromDb);
+            return View(contactsFromDb);
         }
 
 
-        //POST
-        [HttpPost,ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeletePOST(Contacts obj)
+        //Delete
+        [HttpPost]
+        public IActionResult Delete(int? id)
         {
-
-                _db.Contacts.Remove(obj);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+           var contactsFromDb = _db.Contacts.Find(id);
+            if(contactsFromDb == null)
+            {
+                return NotFound();
+            }
+            _db.Contacts.Remove(contactsFromDb);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
 
