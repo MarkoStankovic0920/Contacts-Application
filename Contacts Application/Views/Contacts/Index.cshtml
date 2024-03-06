@@ -3,52 +3,65 @@
     ViewData["Title"] = "Contacts-Index";
 }
 
-<div class="container p-0 text-light">
-    <div class="row pt-4">
-        <div class="col-6">
-        <h1 class="primary">Contacts List</h1>
+<div class="container-sm  p-4 text-light bg-dark text-dark shadow-lg rounded w-100">
+    
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-6">
+                <h1 class="primary">Contacts List</h1>
+            </div>
+
         </div>
-    <div class="col-6 text-end">
-            <a asp-controller="Contacts" asp-action="Create" class="btn btn-primary mb-5" onmouseover="this.style.color='#2ecc71'" onmouseout="this.style.color='#f7f9f9'">
-                <i class="bi bi-person-fill-add"></i> Create
-            </a>
-    </div>
-    </div>
-    <div class="container m-0 p-0">
-        <header class="header bg-primary">
-            <form asp-action="Index"class="search-bar border-2" >
-                <div class="form-check  input-group" >
-                    <input name="childname" type="text" class="form-check form-control-sm ps-lg-0" name="search-area" aria-label="Search" placeholder="Search" style="background-color:dimgray; color:white; width:500px; height:50px;" />
-                    <div class="input-group-lg">
-                    <span class="input-group-text" aria-hidden="true" style="background-color:dimgray; height:50px;" id="basic-text">
-                        <i class="bi bi-search" aria-hidden="true"></i>
-                    </span>
+        <header class="header">
+            <form asp-action="Index"class="search-bar border-2 row" > 
+                    <div class="input-group  col">
+                    <input name="childname" type="text" class="form-control highlight-color text-white border-0" aria-label="Search" placeholder="Search" aria-describedby="search" />
+                        <span class="input-group-text bg-primary border-0" id="search"> <i class="bi bi-search" aria-hidden="true"></i></span>
                     </div>
-                </div>
+                    <div class="col-6 text-end col">
+                        <a asp-controller="Contacts" asp-action="Create" class="btn btn-primary " onmouseover="this.style.color='#2ecc71'" onmouseout="this.style.color='#f7f9f9'">
+                            <i class="bi bi-person-fill-add"></i> Create
+                        </a>
+                    </div>
             </form>
         </header>
+        @if (Model.Count() == 0)
+        {
+            <div>
+                <p class="text-light fs-5 mt-5">There is currently no contacts on your list or matching your search criteria.</p>
+            </div>
+        }
         @foreach (var obj in Model)
         {  
-        <section class="contacts-library m-4">
-                <div class="contacts-section">
-                        <a asp-controller="Contacts" asp-action="Detail" asp-route-id="@obj.Id"><p class="contact-name m-2" onmouseover="this.style.color='#387ADF'" onmouseout="this.style.color='#f7f9f9'">@obj.Name</p></a>
-                    <p><a asp-controller="Contacts" asp-action="Edit" asp-route-id="@obj.Id"><i class="bi bi-pencil text-success m-1">Edit</i></a> <a asp-controller="Contacts" asp-action="DeleteView" asp-route-id="@obj.Id"><i class="bi bi-trash-fill text-danger">Delete</i></a></p>
+            
+           
+                <section class="contacts-library my-5">
+                    <div class="d-flex justify-content-between align-middle">
+                    <div class="d-flex justify-start gap-3 align-middle mb-3">
+                        <div class="text-light highlight-color rounded-circle d-flex justify-content-center align-middle text-center" style="height:36px; width:36px; padding:6px;">
+                        <i class="bi bi-person-fill text-primary" ></i>
+                        </div>
+                        <a asp-controller="Contacts" asp-action="Detail" asp-route-id="@obj.Id"><p class="contact-name m-1" onmouseover="this.style.color='#387ADF'" onmouseout="this.style.color='#f7f9f9'">@obj.Name</p></a>
+                    </div>
+                    <p><a asp-controller="Contacts" asp-action="Edit" asp-route-id="@obj.Id" class="text-success"><i class="bi bi-pencil text-success m-1"></i>Edit</a> <a asp-controller="Contacts" asp-action="DeleteView" asp-route-id="@obj.Id" class="text-danger"><i class="bi bi-trash-fill text-danger m-1"></i>Delete</a></p>
                 </div>
-        <hr style="border-top: 1px solid #387ADF;" />
-        </section>
+                <hr class="highlight-color" />
+            </section>
         }
 </div>  
     @{
         var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
         var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
-<a asp-action="Index" asp-route-pageNumber="@(Model.PageIndex-1)" class="btn btn-primary @prevDisabled">Previous</a>
-<a asp-controller="Contacts" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex+1)" class="btn btn-primary @nextDisabled">Next</a>
+    <div class="d-flex justify-content-end gap-3">
+    <a asp-action="Index" asp-route-pageNumber="@(Model.PageIndex-1)" class="btn btn-primary @prevDisabled">Previous</a>
+    <a asp-controller="Contacts" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex+1)" class="btn btn-primary @nextDisabled">Next</a>
+    </div>
 
 @section scripts{
     <script>
         $(function() {
-            $("#basic-text").click(function() {
+            $("#search").click(function() {
                      $("form").submit();
                 })
         });

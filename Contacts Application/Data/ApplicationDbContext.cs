@@ -7,11 +7,9 @@ namespace Contacts_Application.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
         }
 
         public DbSet<Contacts> Contacts
-        {   get; set;    }
-
+        { get; set; }
     }
 }

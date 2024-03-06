@@ -1,7 +1,6 @@
 ﻿using Contacts_Application.Data;
 using Contacts_Application.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace Contacts_Application.Controllers
 {
@@ -13,7 +12,8 @@ namespace Contacts_Application.Controllers
         {
             _db = db;
         }
-        public IActionResult Index(int ? pageNumber, string ? childname = null)
+
+        public IActionResult Index(int? pageNumber, string? childname = null)
         {
             int pageSize = 5;
             if (string.IsNullOrEmpty(childname))
@@ -28,7 +28,7 @@ namespace Contacts_Application.Controllers
                     return View("Index");
                 }
                 return View("Index", PaginatedList<Contacts>.Create(obj, pageNumber ?? 1, pageSize));
-            }    
+            }
         }
 
         public IActionResult Create()
@@ -36,12 +36,11 @@ namespace Contacts_Application.Controllers
             return View();
         }
 
-        public IActionResult Detail(int?id)
+        public IActionResult Detail(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
-
             }
             var categoryFromDb = _db.Contacts.Find(id);
             if (categoryFromDb == null)
@@ -53,9 +52,10 @@ namespace Contacts_Application.Controllers
 
         //POST
         [HttpPost]
-        public IActionResult Create(Contacts obj) {
+        public IActionResult Create(Contacts obj)
+        {
             if (ModelState.IsValid)
-            {    
+            {
                 _db.Contacts.Add(obj);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
@@ -63,13 +63,11 @@ namespace Contacts_Application.Controllers
             return View();
         }
 
-
-        public IActionResult Edit(int?id)
+        public IActionResult Edit(int? id)
         {
-            if (id==null || id==0)
+            if (id == null || id == 0)
             {
                 return NotFound();
-
             }
             var categoryFromDb = _db.Contacts.Find(id);
             if (categoryFromDb == null)
@@ -79,9 +77,8 @@ namespace Contacts_Application.Controllers
             return View(categoryFromDb);
         }
 
-
         //Patch
-        [HttpPost] 
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Contacts obj)
         {
@@ -99,7 +96,6 @@ namespace Contacts_Application.Controllers
             if (id == null || id == 0)
             {
                 return NotFound();
-
             }
             var contactsFromDb = _db.Contacts.Find(id);
             if (contactsFromDb == null)
@@ -109,13 +105,12 @@ namespace Contacts_Application.Controllers
             return View(contactsFromDb);
         }
 
-
         //Delete
         [HttpPost]
         public IActionResult Delete(int? id)
         {
-           var contactsFromDb = _db.Contacts.Find(id);
-            if(contactsFromDb == null)
+            var contactsFromDb = _db.Contacts.Find(id);
+            if (contactsFromDb == null)
             {
                 return NotFound();
             }
@@ -123,7 +118,5 @@ namespace Contacts_Application.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
-
-
     }
 }
